@@ -135,3 +135,7 @@ unique account total and how many results were discarded.
 - **Anonymous searches are degraded.** Expect fewer results without a token.
 - **Rate limits apply.** Roughly 300 requests per 5 minutes per instance;
   increase `--delay` for large term lists.
+
+## License
+
+[MIT](LICENSE)

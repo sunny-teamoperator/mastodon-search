@@ -22,18 +22,61 @@ misleading:
 This script issues one request per identifier and discards results that match
 only the domain portion, so a "no matches" answer is trustworthy.
 
-## Installation
+## Requirements
+
+Python 3.9 or newer. Nothing else — the script imports only the standard
+library, so there is no virtualenv, `requirements.txt`, or install step.
+
+macOS ships a suitable Python 3. Confirm yours:
 
 ```bash
-git clone <repo-url>
+python3 --version
+```
+
+If that reports an error or a version below 3.9, install a current Python with
+`brew install python` (macOS), `apt install python3` (Debian/Ubuntu), or from
+[python.org](https://www.python.org/downloads/).
+
+## Installation
+
+Clone the repository and mark the script executable:
+
+```bash
+git clone https://github.com/sunny-teamoperator/mastodon-search.git
 cd mastodon-search
 chmod +x mastodon_search.py
 ```
 
-## Usage
+Verify it runs:
+
+```bash
+./mastodon_search.py --help
+```
+
+To call it from anywhere, symlink it onto your `PATH`:
+
+```bash
+ln -s "$PWD/mastodon_search.py" /usr/local/bin/mastodon-search
+```
+
+## Running
 
 ```bash
 ./mastodon_search.py TERM [TERM ...]
+```
+
+If you skipped `chmod`, or the shebang does not resolve on your system, invoke
+the interpreter directly — this works identically:
+
+```bash
+python3 mastodon_search.py TERM [TERM ...]
+```
+
+A first run needs no configuration, though results are limited without a token
+(see [Authentication](#authentication)):
+
+```bash
+./mastodon_search.py Gargron
 ```
 
 Terms may be usernames or email addresses. Comma-separated values are split
@@ -43,6 +86,10 @@ automatically, so both of these are equivalent:
 ./mastodon_search.py alice bob carol@example.com
 ./mastodon_search.py "alice,bob,carol@example.com"
 ```
+
+The script exits `0` on success and `2` when no usable search terms were given.
+Per-term failures (HTTP, network, malformed JSON) are reported on stderr and do
+not abort the remaining lookups.
 
 ### Options
 
